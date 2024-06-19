@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class AddressBook {
@@ -10,6 +11,7 @@ public class AddressBook {
     private String zipCode;
     private String phoneNumber;
     private String email;
+    public static int numOfContacts = 0;
     AddressBook(String firstName,String lastName, String address,String city, String state,String zipCode, String phoneNumber, String email){
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,6 +21,7 @@ public class AddressBook {
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        numOfContacts++;
     }
     public void printInfo(){
         System.out.println("Name: "+firstName+" "+lastName);
@@ -29,33 +32,100 @@ public class AddressBook {
         System.out.println("Email: "+email);
     }
     public static void main(String[] args) {
-        System.out.println("Welcome to the Address Book program.");
-        System.out.print("How many contacts do you want to enter?: ");
         Scanner scanner = new Scanner(System.in);
-        int num = scanner.nextInt();
-        scanner.nextLine();
+        System.out.println("Welcome to the Address Book program.");
         ArrayList<AddressBook> contacts = new ArrayList<AddressBook>();
-        for(int i = 0; i < num; i++){
-            System.out.print("Enter the first name: ");
-            String firstName = scanner.nextLine();
-            System.out.print("Enter the last name: ");
-            String lastName = scanner.nextLine();
-            System.out.print("Enter the address: ");
-            String address = scanner.nextLine();
-            System.out.print("Enter the city: ");
-            String city = scanner.nextLine();
-            System.out.print("Enter the state: ");
-            String state = scanner.nextLine();
-            System.out.print("Enter the zip code: ");
-            String zipCode = scanner.nextLine();
-            System.out.print("Enter the phone number: ");
-            String phoneNumber = scanner.nextLine();
-            System.out.print("Enter the email: ");
-            String email = scanner.nextLine();
-            contacts.add(new AddressBook(firstName,lastName,address,city,state,zipCode,phoneNumber,email));
-        }
-        for(AddressBook cont: contacts){
-            cont.printInfo();
+        boolean run = true;
+        while(run){
+            System.out.println("1. Add contact\t 2. Edit contact\t 3. Exit");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice){
+                case 1:
+                    System.out.print("Enter the first name: ");
+                    String firstName = scanner.nextLine();
+                    System.out.print("Enter the last name: ");
+                    String lastName = scanner.nextLine();
+                    System.out.print("Enter the address: ");
+                    String address = scanner.nextLine();
+                    System.out.print("Enter the city: ");
+                    String city = scanner.nextLine();
+                    System.out.print("Enter the state: ");
+                    String state = scanner.nextLine();
+                    System.out.print("Enter the zip code: ");
+                    String zipCode = scanner.nextLine();
+                    System.out.print("Enter the phone number: ");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.print("Enter the email: ");
+                    String email = scanner.nextLine();
+                    contacts.add(new AddressBook(firstName,lastName,address,city,state,zipCode,phoneNumber,email));
+                    break;
+
+                case 2:
+                    System.out.println("Enter the first name of that contact you want to edit: ");
+                    String name = scanner.next();
+                    for (AddressBook cont: contacts) {
+                        if(Objects.equals(cont.firstName, name)){
+                            System.out.println("What do you want to edit?");
+                            System.out.println("1. Address");
+                            System.out.println("2. City");
+                            System.out.println("3. State");
+                            System.out.println("4. Zip code");
+                            System.out.println("5. Phone number");
+                            System.out.println("6. Email");
+                            int scase = scanner.nextInt();
+                            switch (scase){
+                                case 1:
+                                    scanner.nextLine();
+                                    System.out.println("Enter the new address: ");
+                                    cont.address = scanner.nextLine();
+                                    System.out.println("The address has been changed.");
+                                    break;
+                                case 2:
+                                    scanner.nextLine();
+                                    System.out.println("Enter the new City: ");
+                                    cont.city = scanner.nextLine();
+                                    System.out.println("The City has been changed.");
+                                    break;
+                                case 3:
+                                    scanner.nextLine();
+                                    System.out.println("Enter the new State: ");
+                                    cont.state = scanner.nextLine();
+                                    System.out.println("The state has been changed.");
+                                    break;
+                                case 4:
+                                    scanner.nextLine();
+                                    System.out.println("Enter the new Zip code: ");
+                                    cont.zipCode = scanner.nextLine();
+                                    System.out.println("The zip code has been changed.");
+                                    break;
+                                case 5:
+                                    scanner.nextLine();
+                                    System.out.println("Enter the new phone number: ");
+                                    cont.phoneNumber = scanner.nextLine();
+                                    System.out.println("The phone number has been changed.");
+                                    break;
+                                case 6:
+                                    scanner.nextLine();
+                                    System.out.println("Enter the new email: ");
+                                    cont.email = scanner.nextLine();
+                                    System.out.println("The email has been changed.");
+                                    break;
+                                default:
+                                    System.out.println("Wrong number/key entered.");
+                            }
+                            System.out.println("The new contact info is: ");
+                            cont.printInfo();
+
+                        }
+                    }
+                    break;
+                case 3:
+                    run = false;
+                    break;
+                default:
+                    System.out.println("Wrong number/key pressed.");
+            }
         }
     }
 }
