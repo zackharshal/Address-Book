@@ -31,13 +31,27 @@ public class AddressBook {
         System.out.println("Phone Number: "+ phoneNumber);
         System.out.println("Email: "+email);
     }
+    static void deleteContact(ArrayList<AddressBook> contacts){
+        Scanner scanner = new Scanner(System.in);
+        for(int i=0;i<contacts.size();i++){
+            System.out.printf("%s\n",contacts.get(i).firstName);
+        }
+        System.out.println("Enter the name of the contact you want to delete");
+        String name= scanner.nextLine();
+        for(int i=0;i<contacts.size();i++){
+            if(contacts.get(i).firstName.equals(name)){
+                contacts.remove(i);
+            }
+        }
+        System.out.println("Contact has been deleted");
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the Address Book program.");
         ArrayList<AddressBook> contacts = new ArrayList<AddressBook>();
         boolean run = true;
         while(run){
-            System.out.println("1. Add contact\t 2. Edit contact\t 3. Exit");
+            System.out.println("1. Add contact\t 2. Edit contact\t 3. Delete contact\t 4. Exit");
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice){
@@ -62,6 +76,9 @@ public class AddressBook {
                     break;
 
                 case 2:
+                    for(AddressBook cont: contacts){
+                        System.out.println(cont.firstName);
+                    }
                     System.out.println("Enter the first name of that contact you want to edit: ");
                     String name = scanner.next();
                     for (AddressBook cont: contacts) {
@@ -116,11 +133,13 @@ public class AddressBook {
                             }
                             System.out.println("The new contact info is: ");
                             cont.printInfo();
-
                         }
                     }
                     break;
                 case 3:
+                    deleteContact(contacts);
+                    break;
+                case 4:
                     run = false;
                     break;
                 default:
