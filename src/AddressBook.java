@@ -11,8 +11,14 @@ public class AddressBook {
     private String zipCode;
     private String phoneNumber;
     private String email;
-    public static int numOfContacts = 0;
-    AddressBook(String firstName,String lastName, String address,String city, String state,String zipCode, String phoneNumber, String email){
+    public int numOfContacts = 0;
+    ArrayList<AddressBook> contacts = new ArrayList<AddressBook>();
+    static Scanner scanner = new Scanner(System.in);
+
+    AddressBook(){
+        addContact();
+    }
+    AddressBook(String firstName, String lastName, String address, String city, String state, String zipCode, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -21,37 +27,23 @@ public class AddressBook {
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        numOfContacts++;
     }
-    public void printInfo(){
-        System.out.println("Name: "+firstName+" "+lastName);
-        System.out.println("Address: "+address);
-        System.out.println("City,State: "+city+", "+state);
-        System.out.println("Zipcode: "+zipCode);
-        System.out.println("Phone Number: "+ phoneNumber);
-        System.out.println("Email: "+email);
-    }
-    // created a new static function that deletes the contact
-    static void deleteContact(ArrayList<AddressBook> contacts){
-        Scanner scanner = new Scanner(System.in);
-        for(int i=0;i<contacts.size();i++){
-            System.out.printf("%s\n",contacts.get(i).firstName);
+
+    public void printInfo() {
+        for (AddressBook con : contacts) {
+            System.out.println("Name: " + con.firstName + " " + con.lastName);
+            System.out.println("Address: " + con.address);
+            System.out.println("City, State: " + con.city + ", " + con.state);
+            System.out.println("Zipcode: " + con.zipCode);
+            System.out.println("Phone Number: " + con.phoneNumber);
+            System.out.println("Email: " + con.email);
+            System.out.println();
         }
-        System.out.println("Enter the name of the contact you want to delete");
-        String name= scanner.nextLine();
-        for(int i=0;i<contacts.size();i++){
-            if(contacts.get(i).firstName.equals(name)){
-                contacts.remove(i);
-            }
-        }
-        System.out.println("Contact has been deleted");
     }
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to the Address Book program.");
-        ArrayList<AddressBook> contacts = new ArrayList<AddressBook>();
+
+    public void addContact() {
         boolean condi = true;
-        while(condi){
+        while (condi) {
             System.out.println("1. Add contact\t 2. Edit contact\t 3. Delete contact\t 4. Exit");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -73,13 +65,15 @@ public class AddressBook {
                     String phoneNumber = scanner.nextLine();
                     System.out.print("Enter the email: ");
                     String email = scanner.nextLine();
+
                     contacts.add(new AddressBook(firstName, lastName, address, city, state, zipCode, phoneNumber, email));
+                    numOfContacts++;
                 }
                 case 2 -> {
                     for (AddressBook cont : contacts) {
                         System.out.println(cont.firstName);
                     }
-                    System.out.println("Enter the first name of that contact you want to edit: ");
+                    System.out.println("Enter the first name of the contact you want to edit: ");
                     String name = scanner.next();
                     for (AddressBook cont : contacts) {
                         if (Objects.equals(cont.firstName, name)) {
@@ -131,14 +125,34 @@ public class AddressBook {
                                 default -> System.out.println("Wrong number/key entered.");
                             }
                             System.out.println("The new contact info is: ");
-                            cont.printInfo();
                         }
                     }
                 }
-                case 3 -> deleteContact(contacts);
+                case 3 -> {
+                    if (numOfContacts > 0) {
+                        deleteContact(contacts);
+                        numOfContacts--;
+                    }
+                }
                 case 4 -> condi = false;
                 default -> System.out.println("Wrong number/key pressed.");
             }
         }
+    }
+
+    static void deleteContact(ArrayList<AddressBook> contacts) {
+        Scanner scanner = new Scanner(System.in);
+        for (int i = 0; i < contacts.size(); i++) {
+            System.out.printf("%s\n", contacts.get(i).firstName);
+        }
+        System.out.println("Enter the name of the contact you want to delete");
+        String name = scanner.nextLine();
+        for (int i = 0; i < contacts.size(); i++) {
+            if (contacts.get(i).firstName.equals(name)) {
+                contacts.remove(i);
+                break;
+            }
+        }
+        System.out.println("Contact has been deleted");
     }
 }
