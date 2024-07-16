@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
-public class AddressBook {
+class AddressBook {
     private String firstName;
     private String lastName;
     private String address;
@@ -12,13 +15,44 @@ public class AddressBook {
     private String phoneNumber;
     private String email;
     public int numOfContacts = 0;
-    ArrayList<AddressBook> contacts = new ArrayList<AddressBook>();
+    ArrayList<AddressBook> contacts = new ArrayList<>();
     static Scanner scanner = new Scanner(System.in);
 
-    AddressBook(){
+    AddressBook() {
         addContact();
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -27,6 +61,7 @@ public class AddressBook {
         return Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName);
     }
+
     AddressBook(String firstName, String lastName, String address, String city, String state, String zipCode, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,15 +110,13 @@ public class AddressBook {
                     System.out.print("Enter the email: ");
                     String email = scanner.nextLine();
 
-                    AddressBook newContact =new AddressBook(firstName, lastName, address, city, state, zipCode, phoneNumber, email);
+                    AddressBook newContact = new AddressBook(firstName, lastName, address, city, state, zipCode, phoneNumber, email);
                     if (contacts.stream().anyMatch(contact -> contact.equals(newContact))) {
                         System.out.println("This contact already exists.");
-                    }
-                    else {
+                    } else {
                         contacts.add(newContact);
                         numOfContacts++;
                     }
-
                 }
                 case 2 -> {
                     for (AddressBook cont : contacts) {
