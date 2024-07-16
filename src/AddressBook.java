@@ -18,6 +18,15 @@ public class AddressBook {
     AddressBook(){
         addContact();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddressBook that = (AddressBook) o;
+        return Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName);
+    }
     AddressBook(String firstName, String lastName, String address, String city, String state, String zipCode, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,8 +75,15 @@ public class AddressBook {
                     System.out.print("Enter the email: ");
                     String email = scanner.nextLine();
 
-                    contacts.add(new AddressBook(firstName, lastName, address, city, state, zipCode, phoneNumber, email));
-                    numOfContacts++;
+                    AddressBook newContact =new AddressBook(firstName, lastName, address, city, state, zipCode, phoneNumber, email);
+                    if (contacts.stream().anyMatch(contact -> contact.equals(newContact))) {
+                        System.out.println("This contact already exists.");
+                    }
+                    else {
+                        contacts.add(newContact);
+                        numOfContacts++;
+                    }
+
                 }
                 case 2 -> {
                     for (AddressBook cont : contacts) {
