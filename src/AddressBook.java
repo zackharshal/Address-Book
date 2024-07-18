@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 class AddressBook {
     private String firstName;
@@ -9,10 +12,12 @@ class AddressBook {
     private String zipCode;
     private String phoneNumber;
     private String email;
-    private ArrayList<AddressBook> contacts;
+    public int numOfContacts = 0;
+    ArrayList<AddressBook> contacts = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
 
-    public AddressBook() {
-        this.contacts = new ArrayList<>();
+    AddressBook() {
+        // No call to addContact() in the constructor
     }
 
     public String getFirstName() {
@@ -67,20 +72,39 @@ class AddressBook {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + firstName + " " + lastName + "\n" +
+                "Address: " + address + "\n" +
+                "City: " + city + ", State: " + state + "\n" +
+                "Zipcode: " + zipCode + "\n" +
+                "Phone Number: " + phoneNumber + "\n" +
+                "Email: " + email + "\n";
+    }
+
     public void printInfo() {
-        for (AddressBook con : contacts) {
-            System.out.println("Name: " + con.firstName + " " + con.lastName);
-            System.out.println("Address: " + con.address);
-            System.out.println("City, State: " + con.city + ", " + con.state);
-            System.out.println("Zipcode: " + con.zipCode);
-            System.out.println("Phone Number: " + con.phoneNumber);
-            System.out.println("Email: " + con.email);
-            System.out.println();
+        contacts.stream()
+                .sorted((c1, c2) -> (c1.getFirstName() + " " + c1.getLastName()).compareTo(c2.getFirstName() + " " + c2.getLastName()))
+                .forEach(System.out::println);
+    }
+
+    public void manageContacts() {
+        boolean condi = true;
+        while (condi) {
+            System.out.println("1. Add contact\t 2. Edit contact\t 3. Delete contact\t 4. Exit");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1 -> addContact();
+                case 2 -> editContact();
+                case 3 -> deleteContact();
+                case 4 -> condi = false;
+                default -> System.out.println("Wrong number/key pressed.");
+            }
         }
     }
 
     public void addContact() {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the first name: ");
         String firstName = scanner.nextLine();
         System.out.print("Enter the last name: ");
@@ -103,14 +127,18 @@ class AddressBook {
             System.out.println("This contact already exists.");
         } else {
             contacts.add(newContact);
+            numOfContacts++;
             MultipleAB.updateDictionaries(city, state, newContact);
         }
     }
 
     public void editContact() {
-        Scanner scanner = new Scanner(System.in);
+        for (AddressBook cont : contacts) {
+            System.out.println(cont.firstName);
+        }
         System.out.println("Enter the first name of the contact you want to edit: ");
         String name = scanner.next();
+        scanner.nextLine();
         for (AddressBook cont : contacts) {
             if (Objects.equals(cont.firstName, name)) {
                 System.out.println("What do you want to edit?");
@@ -155,44 +183,19 @@ class AddressBook {
                     }
                     default -> System.out.println("Wrong number/key entered.");
                 }
-                MultipleAB.updateDictionaries(cont.city, cont.state, cont);
                 System.out.println("The new contact info is: ");
-                return;
+                MultipleAB.updateDictionaries(cont.city, cont.state, cont);
             }
         }
-        System.out.println("Contact not found.");
     }
 
     public void deleteContact() {
-        Scanner scanner = new Scanner(System.in);
+        for (int i = 0; i < contacts.size(); i++) {
+            System.out.printf("%s\n", contacts.get(i).firstName);
+        }
         System.out.println("Enter the name of the contact you want to delete");
         String name = scanner.nextLine();
-        for (int i = 0; i < contacts.size(); i++) {
-            if (contacts.get(i).firstName.equals(name)) {
-                AddressBook contact = contacts.remove(i);
-                MultipleAB.cityPersonMap.get(contact.city).remove(contact);
-                MultipleAB.statePersonMap.get(contact.state).remove(contact);
-                System.out.println("Contact has been deleted");
-                return;
-            }
-        }
-        System.out.println("Contact not found.");
-    }
-
-    public void manageContacts() {
-        Scanner scanner = new Scanner(System.in);
-        boolean condi = true;
-        while (condi) {
-            System.out.println("1. Add contact\t 2. Edit contact\t 3. Delete contact\t 4. Exit");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
-                case 1 -> addContact();
-                case 2 -> editContact();
-                case 3 -> deleteContact();
-                case 4 -> condi = false;
-                default -> System.out.println("Wrong number/key pressed.");
-            }
-        }
+        contacts.removeIf(contact -> contact.firstName.equals(name));
+        System.out.println("Contact has been deleted");
     }
 }
