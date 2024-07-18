@@ -128,7 +128,7 @@ class AddressBook {
         } else {
             contacts.add(newContact);
             numOfContacts++;
-            MultipleAB.updateDictionaries(city, state, newContact);
+            MultipleAB.updateDictionaries(city, state, zipCode, newContact);
         }
     }
 
@@ -184,7 +184,7 @@ class AddressBook {
                     default -> System.out.println("Wrong number/key entered.");
                 }
                 System.out.println("The new contact info is: ");
-                MultipleAB.updateDictionaries(cont.city, cont.state, cont);
+                MultipleAB.updateDictionaries(cont.city, cont.state,cont.zipCode, cont);
             }
         }
     }

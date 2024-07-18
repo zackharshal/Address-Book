@@ -5,6 +5,7 @@ public class MultipleAB {
     static HashMap<String, AddressBook> multipleAB = new HashMap<>();
     static HashMap<String, Set<AddressBook>> cityPersonMap = new HashMap<>();
     static HashMap<String, Set<AddressBook>> statePersonMap = new HashMap<>();
+    static HashMap<String, Set<AddressBook>> zipPersonMap = new HashMap<>();
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Address Book program.");
@@ -15,7 +16,8 @@ public class MultipleAB {
             System.out.println("2. Search person by city or state");
             System.out.println("3. View persons by city");
             System.out.println("4. View persons by state");
-            System.out.println("5. Exit");
+            System.out.println("5. View persons by zip code");
+            System.out.println("6. Exit");
             int choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -41,7 +43,12 @@ public class MultipleAB {
                     String state = scanner.nextLine();
                     viewPersonsByState(state);
                 }
-                case 5 -> check = false;
+                case 5 -> {
+                    System.out.println("Enter zip code to view persons: ");
+                    String zip = scanner.nextLine();
+                    viewPersonsByZip(zip);
+                }
+                case 6 -> check = false;
                 default -> System.out.println("Wrong number/key pressed.");
             }
         }
@@ -53,9 +60,10 @@ public class MultipleAB {
         }
     }
 
-    public static void updateDictionaries(String city, String state, AddressBook contact) {
+    public static void updateDictionaries(String city, String state, String zipcode, AddressBook contact) {
         cityPersonMap.computeIfAbsent(city, k -> new HashSet<>()).add(contact);
         statePersonMap.computeIfAbsent(state, k -> new HashSet<>()).add(contact);
+        zipPersonMap.computeIfAbsent(zipcode, k -> new HashSet<>()).add(contact);
     }
 
     public static void searchPersonByCityOrState(String location) {
@@ -74,7 +82,9 @@ public class MultipleAB {
         if (persons.isEmpty()) {
             System.out.println("No contacts found in " + city);
         } else {
-            persons.forEach(System.out::println);
+            persons.stream()
+                    .sorted((c1, c2) -> (c1.getFirstName() + " " + c1.getLastName()).compareTo(c2.getFirstName() + " " + c2.getLastName()))
+                    .forEach(System.out::println);
         }
     }
 
@@ -83,7 +93,19 @@ public class MultipleAB {
         if (persons.isEmpty()) {
             System.out.println("No contacts found in " + state);
         } else {
-            persons.forEach(System.out::println);
+            persons.stream()
+                    .sorted((c1, c2) -> (c1.getFirstName() + " " + c1.getLastName()).compareTo(c2.getFirstName() + " " + c2.getLastName()))
+                    .forEach(System.out::println);
+        }
+    }
+    public static void viewPersonsByZip(String zip) {
+        Set<AddressBook> persons = zipPersonMap.getOrDefault(zip, new HashSet<>());
+        if (persons.isEmpty()) {
+            System.out.println("No contacts found in " + zip);
+        } else {
+            persons.stream()
+                    .sorted((c1, c2) -> (c1.getFirstName() + " " + c1.getLastName()).compareTo(c2.getFirstName() + " " + c2.getLastName()))
+                    .forEach(System.out::println);
         }
     }
 }
